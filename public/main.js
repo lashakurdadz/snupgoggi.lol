@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const ACCESS_KEY = 'gogi_access';
+  const SIGNUP_KEY = 'gogi_signed_up';
+  const path = window.location.pathname || '';
+
+  // Simple gate: if user hasn't unlocked and isn't on the entry page, send them there
+  if (path !== '/entry.html' && !path.endsWith('/entry.html')) {
+    const hasAccess = localStorage.getItem(ACCESS_KEY) === '1';
+    if (!hasAccess) {
+      window.location.replace('/entry.html');
+      return;
+    }
+  }
+
   const donateCheckbox = document.getElementById('donate');
   const donationInfo = document.getElementById('donation-info');
   const signupForm = document.getElementById('signup-form');
@@ -6,6 +19,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const accountNumberEl = document.getElementById('account-number');
   const copyBtn = document.getElementById('copy-account');
   const copyStatus = document.getElementById('copy-status');
+  const nameField = document.querySelector('.field');
+  const donateField = document.querySelector('.checkbox');
+  const submitBtn = document.querySelector('.submit-btn');
+
+  function lockToConfirmation(guestName) {
+    if (nameField) nameField.classList.add('hidden');
+    if (donateField) donateField.classList.add('hidden');
+    if (submitBtn) submitBtn.classList.add('hidden');
+
+    const nameInput = document.getElementById('name');
+    if (nameInput) nameInput.setAttribute('disabled', 'true');
+    if (donateCheckbox) donateCheckbox.setAttribute('disabled', 'true');
+    if (submitBtn) submitBtn.setAttribute('disabled', 'true');
+
+    if (donationInfo) donationInfo.classList.remove('hidden');
+
+    if (formStatus) {
+      formStatus.textContent = `You're on the list, ${guestName}.`;
+      formStatus.classList.remove('error');
+      formStatus.classList.add('success');
+    }
+  }
+
+  // If this browser already signed up, show confirmation-only state.
+  try {
+    const stored = localStorage.getItem(SIGNUP_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      const storedName = parsed && typeof parsed.name === 'string' ? parsed.name : null;
+      if (storedName) {
+        lockToConfirmation(storedName);
+        return;
+      }
+    }
+  } catch (_) {
+    // ignore corrupt storage
+  }
 
   if (donateCheckbox && donationInfo) {
     donateCheckbox.addEventListener('change', () => {
@@ -46,6 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      if (!willDonate) {
+        formStatus.textContent = 'You need to agree to donate to get on the list.';
+        formStatus.classList.add('error');
+        return;
+      }
+
       try {
         const res = await fetch('/api/guests', {
           method: 'POST',
@@ -67,9 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
         formStatus.textContent = `${msg} ${name}, see you there.`;
         formStatus.classList.add('success');
 
-        signupForm.classList.add('submitted');
-        nameInput.setAttribute('disabled', 'true');
-        donateCheckbox.setAttribute('disabled', 'true');
+        localStorage.setItem(
+          SIGNUP_KEY,
+          JSON.stringify({ name, willDonate: true, at: Date.now() })
+        );
+
+        lockToConfirmation(name);
       } catch (err) {
         formStatus.textContent = 'Network issue. Please try again in a moment.';
         formStatus.classList.add('error');
