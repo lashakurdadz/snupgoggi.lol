@@ -1,16 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const ACCESS_KEY = 'gogi_access';
   const SIGNUP_KEY = 'gogi_signed_up';
-  const path = window.location.pathname || '';
-
-  // Simple gate: if user hasn't unlocked and isn't on the entry page, send them there
-  if (path !== '/entry.html' && !path.endsWith('/entry.html')) {
-    const hasAccess = localStorage.getItem(ACCESS_KEY) === '1';
-    if (!hasAccess) {
-      window.location.replace('/entry.html');
-      return;
-    }
-  }
 
   const donateCheckbox = document.getElementById('donate');
   const donationInfo = document.getElementById('donation-info');

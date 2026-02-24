@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Gogi's Birthday Party signup site",
   "scripts": {
+    "dev": "npx --yes vercel dev",
     "vercel-build": "echo \"No build step\""
   },
   "author": "",
