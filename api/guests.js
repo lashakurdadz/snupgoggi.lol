@@ -1,14 +1,29 @@
-const { sql } = require('@vercel/postgres');
+const { Pool } = require('@neondatabase/serverless');
+
+// Try common env var names for a Postgres connection string.
+const connectionString =
+  process.env.DATABASE_URL ||
+  process.env.NEON_DATABASE_URL ||
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_URL_NON_POOLING;
+
+if (!connectionString) {
+  throw new Error(
+    'Missing database connection string. Set DATABASE_URL (or NEON_DATABASE_URL / POSTGRES_URL) in your Vercel project settings.'
+  );
+}
+
+const pool = new Pool({ connectionString });
 
 async function ensureTable() {
-  await sql`
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS guests (
       id SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
       will_donate BOOLEAN NOT NULL DEFAULT false,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `;
+    )
+  `);
 }
 
 module.exports = async (req, res) => {
@@ -21,14 +36,16 @@ module.exports = async (req, res) => {
 
   if (req.method === 'GET') {
     try {
-      const result = await sql`
+      const result = await pool.query(
+        `
         SELECT
           name,
           will_donate AS "willDonate",
           created_at AS "createdAt"
         FROM guests
-        ORDER BY created_at ASC;
-      `;
+        ORDER BY created_at ASC
+      `
+      );
       return res.status(200).json(result.rows);
     } catch (err) {
       console.error('Error loading guests:', err);
@@ -46,15 +63,18 @@ module.exports = async (req, res) => {
     }
 
     try {
-      const existing = await sql`
+      const existing = await pool.query(
+        `
         SELECT
           name,
           will_donate AS "willDonate",
           created_at AS "createdAt"
         FROM guests
-        WHERE LOWER(name) = LOWER(${name})
-        LIMIT 1;
-      `;
+        WHERE LOWER(name) = LOWER($1)
+        LIMIT 1
+      `,
+        [name]
+      );
 
       if (existing.rows.length > 0) {
         return res.status(200).json({
@@ -63,14 +83,17 @@ module.exports = async (req, res) => {
         });
       }
 
-      const inserted = await sql`
+      const inserted = await pool.query(
+        `
         INSERT INTO guests (name, will_donate)
-        VALUES (${name}, ${willDonate})
+        VALUES ($1, $2)
         RETURNING
           name,
           will_donate AS "willDonate",
-          created_at AS "createdAt";
-      `;
+          created_at AS "createdAt"
+      `,
+        [name, willDonate]
+      );
 
       return res.status(201).json({
         message: 'You are on the list!',
