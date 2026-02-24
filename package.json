@@ -1,0 +1,13 @@
+{
+  "name": "snupgoggi-birthday-signup",
+  "version": "1.0.0",
+  "description": "Gogi's Birthday Party signup site",
+  "scripts": {
+    "vercel-build": "echo \"No build step\""
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/postgres": "^0.10.0"
+  }
+}
