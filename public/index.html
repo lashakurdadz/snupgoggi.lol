@@ -51,19 +51,53 @@
           <div id="donation-info" class="donation-info hidden">
             <p class="donation-title">Donation details</p>
             <p class="donation-text">
-              Send your love to this account:
+              Send your love to one of the accounts below:
             </p>
-            <p class="donation-account">
-              <span class="label">Account:</span>
-              <span class="value" id="account-number">GE36BG0000000528550155</span>
-            </p>
-            <button
-              type="button"
-              id="copy-account"
-              class="copy-btn"
-            >
-              Copy account number
-            </button>
+            <div class="donation-accounts">
+              <div class="donation-bank">
+                <div class="donation-bank-header">
+                  <img
+                    src="bog-logo.png"
+                    alt="BOG logo"
+                    class="donation-bank-logo"
+                  />
+                  <span class="donation-bank-name">BOG Account</span>
+                </div>
+                <p class="donation-account">
+                  <span class="label">Account:</span>
+                  <span class="value" id="account-number-bog">GE36BG0000000528550155</span>
+                </p>
+                <button
+                  type="button"
+                  id="copy-account-bog"
+                  class="copy-btn"
+                >
+                  Copy BOG account
+                </button>
+              </div>
+
+              <div class="donation-bank">
+                <div class="donation-bank-header">
+                  <img
+                    src="tbc-logo.png"
+                    alt="TBC logo"
+                    class="donation-bank-logo"
+                  />
+                  <span class="donation-bank-name">TBC Account</span>
+                </div>
+                <p class="donation-account">
+                  <span class="label">Account:</span>
+                  <span class="value" id="account-number-tbc">GE43TB7925345061100113</span>
+                </p>
+                <button
+                  type="button"
+                  id="copy-account-tbc"
+                  class="copy-btn"
+                >
+                  Copy TBC account
+                </button>
+              </div>
+            </div>
             <p id="copy-status" class="copy-status"></p>
           </div>
 

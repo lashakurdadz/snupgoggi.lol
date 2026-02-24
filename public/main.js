@@ -5,8 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const donationInfo = document.getElementById('donation-info');
   const signupForm = document.getElementById('signup-form');
   const formStatus = document.getElementById('form-status');
-  const accountNumberEl = document.getElementById('account-number');
-  const copyBtn = document.getElementById('copy-account');
+  const bogAccountEl = document.getElementById('account-number-bog');
+  const tbcAccountEl = document.getElementById('account-number-tbc');
+  const bogCopyBtn = document.getElementById('copy-account-bog');
+  const tbcCopyBtn = document.getElementById('copy-account-tbc');
   const copyStatus = document.getElementById('copy-status');
   const nameField = document.querySelector('.field');
   const donateField = document.querySelector('.checkbox');
@@ -68,21 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // If this browser already signed up, show confirmation-only state.
-  try {
-    const stored = localStorage.getItem(SIGNUP_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      const storedName = parsed && typeof parsed.name === 'string' ? parsed.name : null;
-      if (storedName) {
-        lockToConfirmation(storedName);
-        return;
-      }
-    }
-  } catch (_) {
-    // ignore corrupt storage
-  }
-
   if (donateCheckbox && donationInfo) {
     donateCheckbox.addEventListener('change', () => {
       if (donateCheckbox.checked) {
@@ -93,16 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (copyBtn && accountNumberEl) {
-    copyBtn.addEventListener('click', async () => {
-      const text = accountNumberEl.textContent || '';
+  function bindCopyButton(buttonEl, valueEl, label) {
+    if (!buttonEl || !valueEl) return;
+    buttonEl.addEventListener('click', async () => {
+      const text = valueEl.textContent || '';
       copyStatus.textContent = '';
       const ok = await copyToClipboard(text);
+      const bankLabel = label || 'account';
       copyStatus.textContent = ok
-        ? 'Account number copied. See you on the dance floor.'
-        : 'Copy blocked. Tap and hold the account number to copy it manually.';
+        ? `${bankLabel} copied. See you on the dance floor.`
+        : `Copy blocked. Tap and hold the ${bankLabel.toLowerCase()} to copy it manually.`;
     });
   }
+
+  bindCopyButton(bogCopyBtn, bogAccountEl, 'BOG account');
+  bindCopyButton(tbcCopyBtn, tbcAccountEl, 'TBC account');
 
   if (signupForm) {
     signupForm.addEventListener('submit', async (event) => {
@@ -158,6 +150,20 @@ document.addEventListener('DOMContentLoaded', () => {
         formStatus.classList.add('error');
       }
     });
+  }
+
+  // If this browser already signed up, show confirmation-only state.
+  try {
+    const stored = localStorage.getItem(SIGNUP_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      const storedName = parsed && typeof parsed.name === 'string' ? parsed.name : null;
+      if (storedName) {
+        lockToConfirmation(storedName);
+      }
+    }
+  } catch (_) {
+    // ignore corrupt storage
   }
 });
 
