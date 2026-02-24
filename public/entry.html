@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Gogi's Party Entry</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="entry-page">
+    <div class="bg-overlay"></div>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-badge">Private Party</div>
+        <h1 class="hero-title">Gogi's Birthday</h1>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Access Code</h2>
+        <p class="card-text">
+          Friends only. Drop the secret code to unlock the guest list.
+        </p>
+
+        <form id="entry-form" class="form">
+          <label class="field">
+            <span class="field-label">Party password</span>
+            <input
+              type="password"
+              id="entry-password"
+              placeholder="type the secret"
+              autocomplete="off"
+              required
+            />
+          </label>
+
+          <button type="submit" class="submit-btn">
+            Enter the party
+          </button>
+
+          <p id="entry-status" class="form-status" role="status"></p>
+        </form>
+
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        const PARTY_PASSWORD = 'gogimagaria'; // change this if you want a different password
+        const ACCESS_KEY = 'gogi_access';
+
+        const path = window.location.pathname || '';
+        const hasAccess = localStorage.getItem(ACCESS_KEY) === '1';
+
+        // If already unlocked, go straight to main page
+        if (hasAccess && !path.endsWith('/index.html') && path !== '/') {
+          window.location.replace('/');
+          return;
+        }
+
+        const form = document.getElementById('entry-form');
+        const input = document.getElementById('entry-password');
+        const status = document.getElementById('entry-status');
+
+        if (!form || !input || !status) return;
+
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          status.textContent = '';
+          status.classList.remove('error', 'success');
+
+          const value = (input.value || '').trim();
+          if (!value) {
+            status.textContent = 'Enter the password.';
+            status.classList.add('error');
+            return;
+          }
+
+          if (value === PARTY_PASSWORD) {
+            localStorage.setItem(ACCESS_KEY, '1');
+            status.textContent = 'Welcome in. Redirecting...';
+            status.classList.add('success');
+            setTimeout(function () {
+              window.location.href = '/';
+            }, 400);
+          } else {
+            status.textContent = 'Wrong code. Ask the host again.';
+            status.classList.add('error');
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
+

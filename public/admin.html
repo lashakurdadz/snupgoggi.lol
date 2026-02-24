@@ -109,6 +109,14 @@
     </main>
 
     <script>
+      (function () {
+        const ACCESS_KEY = 'gogi_access';
+        const hasAccess = localStorage.getItem(ACCESS_KEY) === '1';
+        if (!hasAccess) {
+          window.location.replace('/entry.html');
+        }
+      })();
+
       async function loadGuests() {
         const status = document.getElementById('admin-status');
         const tbody = document.getElementById('guest-rows');

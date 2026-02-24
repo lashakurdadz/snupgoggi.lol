@@ -62,6 +62,12 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Name is required.' });
     }
 
+     if (!willDonate) {
+      return res.status(400).json({
+        error: 'You must agree to donate to join the list.',
+      });
+    }
+
     try {
       const existing = await pool.query(
         `
