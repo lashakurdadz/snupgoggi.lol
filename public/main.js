@@ -11,11 +11,48 @@ document.addEventListener('DOMContentLoaded', () => {
   const nameField = document.querySelector('.field');
   const donateField = document.querySelector('.checkbox');
   const submitBtn = document.querySelector('.submit-btn');
+  const cardFootnote = document.querySelector('.card-footnote');
+
+  async function copyToClipboard(text) {
+    const value = String(text || '').trim();
+    if (!value) return false;
+
+    // Modern clipboard API requires a secure context (https:// or localhost)
+    try {
+      if (window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(value);
+        return true;
+      }
+    } catch (_) {
+      // fall through
+    }
+
+    // Fallback for older/mobile browsers
+    try {
+      const el = document.createElement('textarea');
+      el.value = value;
+      el.setAttribute('readonly', 'true');
+      el.style.position = 'fixed';
+      el.style.top = '-9999px';
+      el.style.left = '-9999px';
+      el.style.opacity = '0';
+      document.body.appendChild(el);
+      el.focus();
+      el.select();
+      el.setSelectionRange(0, el.value.length);
+      const ok = document.execCommand && document.execCommand('copy');
+      document.body.removeChild(el);
+      return Boolean(ok);
+    } catch (_) {
+      return false;
+    }
+  }
 
   function lockToConfirmation(guestName) {
     if (nameField) nameField.classList.add('hidden');
     if (donateField) donateField.classList.add('hidden');
     if (submitBtn) submitBtn.classList.add('hidden');
+    if (cardFootnote) cardFootnote.classList.add('hidden');
 
     const nameInput = document.getElementById('name');
     if (nameInput) nameInput.setAttribute('disabled', 'true');
@@ -60,12 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
     copyBtn.addEventListener('click', async () => {
       const text = accountNumberEl.textContent || '';
       copyStatus.textContent = '';
-      try {
-        await navigator.clipboard.writeText(text);
-        copyStatus.textContent = 'Account number copied. See you on the dance floor.';
-      } catch (err) {
-        copyStatus.textContent = 'Could not copy automatically, please copy it manually.';
-      }
+      const ok = await copyToClipboard(text);
+      copyStatus.textContent = ok
+        ? 'Account number copied. See you on the dance floor.'
+        : 'Copy blocked. Tap and hold the account number to copy it manually.';
     });
   }
 
