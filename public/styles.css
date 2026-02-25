@@ -29,7 +29,7 @@ body.entry-page {
     radial-gradient(circle at 10% 20%, rgba(247, 37, 133, 0.3) 0, transparent 55%),
     radial-gradient(circle at 90% 0, rgba(58, 134, 255, 0.24) 0, transparent 55%),
     radial-gradient(circle at 50% 100%, rgba(0, 255, 171, 0.24) 0, transparent 60%),
-    url('bg-tunnel.png');
+    url('bg-keef.png');
   background-size: auto, auto, auto, cover;
   background-position: center, top right, bottom, center;
   background-repeat: no-repeat;
@@ -453,6 +453,62 @@ input[type='text']:focus {
   color: #b5ffe3;
 }
 
+.disclaimer-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  z-index: 40;
+  animation: disclaimer-backdrop-in 0.18s ease-out;
+}
+
+.disclaimer-modal {
+  max-width: 360px;
+  width: 100%;
+  margin: 0 16px;
+  padding: 16px 16px 14px;
+  border-radius: 16px;
+  background: radial-gradient(circle at 0 0, rgba(251, 113, 133, 0.16), rgba(15, 23, 42, 0.98));
+  border: 1px solid rgba(248, 250, 252, 0.12);
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.9),
+    0 0 0 1px rgba(15, 23, 42, 0.9);
+  transform: translateY(8px) scale(0.96);
+  opacity: 0;
+  animation: disclaimer-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.disclaimer-title {
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.disclaimer-text {
+  font-size: 12px;
+  color: #e5e7eb;
+  opacity: 0.9;
+}
+
+.disclaimer-btn {
+  margin-top: 10px;
+  border-radius: 999px;
+  border: none;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: #f97316;
+  color: #0b1120;
+  box-shadow:
+    0 10px 26px rgba(15, 23, 42, 0.9),
+    0 0 0 1px rgba(15, 23, 42, 1);
+}
+
 .bottom-note {
   margin-top: 18px;
   padding-top: 18px;
@@ -466,6 +522,26 @@ input[type='text']:focus {
 
 .hidden {
   display: none;
+}
+
+@keyframes disclaimer-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes disclaimer-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes bg-move {

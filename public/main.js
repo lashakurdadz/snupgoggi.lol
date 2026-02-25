@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const donateField = document.querySelector('.checkbox');
   const submitBtn = document.querySelector('.submit-btn');
   const cardFootnote = document.querySelector('.card-footnote');
+  const disclaimerBackdrop = document.getElementById('donation-disclaimer-backdrop');
+  const disclaimerOk = document.getElementById('disclaimer-ok');
 
   async function copyToClipboard(text) {
     const value = String(text || '').trim();
@@ -74,9 +76,18 @@ document.addEventListener('DOMContentLoaded', () => {
     donateCheckbox.addEventListener('change', () => {
       if (donateCheckbox.checked) {
         donationInfo.classList.remove('hidden');
+        if (disclaimerBackdrop) {
+          disclaimerBackdrop.classList.remove('hidden');
+        }
       } else {
         donationInfo.classList.add('hidden');
       }
+    });
+  }
+
+  if (disclaimerBackdrop && disclaimerOk) {
+    disclaimerOk.addEventListener('click', () => {
+      disclaimerBackdrop.classList.add('hidden');
     });
   }
 
