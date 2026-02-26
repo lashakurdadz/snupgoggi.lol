@@ -13,7 +13,7 @@ body {
 
 body {
   font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: radial-gradient(circle at top, #f72585 0, #0b0716 45%, #05030a 100%);
+  background: radial-gradient(circle at top, #ff3b9a 0, #120924 45%, #070414 100%);
   color: #f9f5ff;
   -webkit-font-smoothing: antialiased;
 }
@@ -26,22 +26,30 @@ body.entry-page {
   position: fixed;
   inset: 0;
   background-image:
-    radial-gradient(circle at 10% 20%, rgba(247, 37, 133, 0.3) 0, transparent 55%),
-    radial-gradient(circle at 90% 0, rgba(58, 134, 255, 0.24) 0, transparent 55%),
-    radial-gradient(circle at 50% 100%, rgba(0, 255, 171, 0.24) 0, transparent 60%),
+    radial-gradient(circle at 10% 20%, rgba(247, 37, 133, 0.5) 0, transparent 55%),
+    radial-gradient(circle at 90% 0, rgba(58, 134, 255, 0.36) 0, transparent 55%),
+    radial-gradient(circle at 50% 100%, rgba(0, 255, 171, 0.32) 0, transparent 60%),
     url('bg-keef.png');
   background-size: auto, auto, auto, cover;
   background-position: center, top right, bottom, center;
   background-repeat: no-repeat;
   mix-blend-mode: screen;
-  opacity: 0.4;
+  opacity: 0.6;
   pointer-events: none;
-  z-index: -1;
+  z-index: -2;
   animation: bg-move 14s ease-in-out infinite alternate;
 }
 
 body.entry-page .bg-overlay {
   display: none;
+}
+
+.dark-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(0, 0, 0, 0.74), rgba(0, 0, 0, 0.9));
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* Entry page minimal look */
@@ -124,6 +132,81 @@ body.entry-page .submit-btn {
   max-width: 480px;
   margin: 0 auto;
   justify-content: center;
+}
+
+body.list-closed .page {
+  justify-content: center;
+}
+
+body.list-closed {
+  color: #f9fafb;
+}
+
+.closed-page {
+  align-items: center;
+  text-align: center;
+}
+
+.closed-message {
+  max-width: 460px;
+}
+
+.closed-title {
+  font-size: 26px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.closed-text {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.closed-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.closed-detail-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.closed-detail-line .label {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 10px;
+  opacity: 0.7;
+  font-weight: 600;
+}
+
+.closed-detail-line .value {
+  font-weight: 600;
+}
+
+.closed-footnote {
+  margin-top: 20px;
+  font-size: 12px;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.closed-lineup {
+  margin-top: 40px;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .hero {

@@ -13,123 +13,37 @@
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="list-closed">
     <div class="bg-overlay"></div>
-    <main class="page">
-      <section class="hero">
-        <div class="hero-badge">Guest List Only</div>
-        <h1 class="hero-title">Gogi's Birthday Party</h1>
-      </section>
+    <div class="dark-overlay"></div>
 
-      <section class="card">
-        <h2 class="card-title">Join the Guest List</h2>
-        <p class="card-text">
-          Drop your name, confirm you're down to donate, and secure your spot.
+    <main class="page closed-page">
+      <section class="closed-message">
+        <h1 class="closed-title">Guest list is full</h1>
+        <p class="closed-text">
+          Thank you for all your contributions.
         </p>
 
-        <form id="signup-form" class="form">
-          <label class="field">
-            <span class="field-label">Your Name</span>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="e.g. Jeffrey E."
-              autocomplete="name"
-              required
-            />
-          </label>
+        <div class="closed-details">
+          <p class="closed-detail-line">
+            <span class="label">Date</span>
+            <span class="value">28 February</span>
+          </p>
+          <p class="closed-detail-line">
+            <span class="label">Time</span>
+            <span class="value">19:00</span>
+          </p>
+          <p class="closed-detail-line">
+            <span class="label">Address</span>
+            <span class="value">Ana Politkovskaia 43</span>
+          </p>
+        </div>
 
-          <label class="checkbox">
-            <input type="checkbox" id="donate" name="donate" />
-            <span class="checkbox-box"></span>
-            <span class="checkbox-label">
-              I'm ready to donate for the party
-            </span>
-          </label>
-
-          <div id="donation-info" class="donation-info hidden">
-            <p class="donation-title">Donation details</p>
-            <p class="donation-text">
-              Send your love to one of the accounts below:
-            </p>
-            <div class="donation-accounts">
-              <div class="donation-bank">
-                <div class="donation-bank-header">
-                  <img
-                    src="bog-logo.png"
-                    alt="BOG logo"
-                    class="donation-bank-logo"
-                  />
-                  <span class="donation-bank-name">BOG Account</span>
-                </div>
-                <p class="donation-account">
-                  <span class="label">Account:</span>
-                  <span class="value" id="account-number-bog">GE36BG0000000528550155</span>
-                </p>
-                <button
-                  type="button"
-                  id="copy-account-bog"
-                  class="copy-btn"
-                >
-                  Copy BOG account
-                </button>
-              </div>
-
-              <div class="donation-bank">
-                <div class="donation-bank-header">
-                  <img
-                    src="tbc-logo.png"
-                    alt="TBC logo"
-                    class="donation-bank-logo"
-                  />
-                  <span class="donation-bank-name">TBC Account</span>
-                </div>
-                <p class="donation-account">
-                  <span class="label">Account:</span>
-                  <span class="value" id="account-number-tbc">GE43TB7925345061100113</span>
-                </p>
-                <button
-                  type="button"
-                  id="copy-account-tbc"
-                  class="copy-btn"
-                >
-                  Copy TBC account
-                </button>
-              </div>
-            </div>
-            <p id="copy-status" class="copy-status"></p>
-          </div>
-
-          <button type="submit" class="submit-btn">
-            Submit
-          </button>
-
-          <p id="form-status" class="form-status" role="status"></p>
-        </form>
-
-        <p class="card-footnote">
-          Once you submit, you'll see confirmation that you're on the list.
+        <p class="closed-lineup">
+          2027 LINEUP COMING SOON.
         </p>
       </section>
     </main>
-
-    <div id="donation-disclaimer-backdrop" class="disclaimer-backdrop hidden">
-      <div class="disclaimer-modal">
-        <h2 class="disclaimer-title">Disclaimer</h2>
-        <p class="disclaimer-text">
-          This contribution is entirely voluntary and helps cover organizational expenses (such as venue rent,
-          food, and drinks). By checking this box, you agree to contribute an amount of your choice.<br>
-          <br>
-          Please note that this does not replace or exempt you from bringing a birthday gift.<br> <br>
-        </p>
-        <button id="disclaimer-ok" type="button" class="disclaimer-btn">
-          I understand
-        </button>
-      </div>
-    </div>
-
-    <script src="main.js"></script>
   </body>
 </html>
 
