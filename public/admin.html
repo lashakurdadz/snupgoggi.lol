@@ -106,6 +106,28 @@
           </table>
         </div>
       </section>
+
+      <section class="card admin-card">
+        <h2 class="admin-title">Announcement Signups</h2>
+        <p class="admin-subtitle">
+          Emails signed up for 2027 lineup notifications.
+        </p>
+
+        <div id="announcement-status" class="form-status"></div>
+
+        <div id="announcement-table-wrapper" class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Email</th>
+                <th>Signed Up</th>
+              </tr>
+            </thead>
+            <tbody id="announcement-rows"></tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <script>
@@ -162,7 +184,50 @@
         }
       }
 
-      document.addEventListener('DOMContentLoaded', loadGuests);
+      async function loadAnnouncements() {
+        const status = document.getElementById('announcement-status');
+        const tbody = document.getElementById('announcement-rows');
+        status.textContent = 'Loading...';
+        status.classList.remove('error', 'success');
+
+        try {
+          const res = await fetch('/api/announcements');
+          if (!res.ok) {
+            throw new Error('Failed to load signups');
+          }
+          const signups = await res.json();
+
+          status.textContent = signups.length
+            ? signups.length + ' email(s) signed up.'
+            : 'No signups yet.';
+
+          tbody.innerHTML = '';
+          signups.forEach((s, index) => {
+            const tr = document.createElement('tr');
+            const createdAt = s.createdAt
+              ? new Date(s.createdAt)
+              : null;
+            tr.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${s.email || ''}</td>
+              <td>
+                <span class="timestamp">
+                  ${createdAt ? createdAt.toLocaleString() : ''}
+                </span>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } catch (err) {
+          status.textContent = 'Could not load announcement signups.';
+          status.classList.add('error');
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        loadGuests();
+        loadAnnouncements();
+      });
     </script>
   </body>
 </html>

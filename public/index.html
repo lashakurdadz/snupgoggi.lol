@@ -6,44 +6,69 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>Gogi's Birthday Party</title>
+    <title>Snupgoggi</title>
     <link rel="stylesheet" href="styles.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body class="list-closed">
-    <div class="bg-overlay"></div>
-    <div class="dark-overlay"></div>
+  <body class="landing-page">
+    <main class="page landing-page-content">
+      <h1 class="landing-title">2027 LINEUP COMING SOON.</h1>
 
-    <main class="page closed-page">
-      <section class="closed-message">
-        <h1 class="closed-title">Guest list is full</h1>
-        <p class="closed-text">
-          Thank you for all your contributions.
-        </p>
-
-        <div class="closed-details">
-          <p class="closed-detail-line">
-            <span class="label">Date</span>
-            <span class="value">28 February</span>
-          </p>
-          <p class="closed-detail-line">
-            <span class="label">Time</span>
-            <span class="value">19:00</span>
-          </p>
-          <p class="closed-detail-line">
-            <span class="label">Address</span>
-            <span class="value">Ana Politkovskaia 43</span>
-          </p>
-        </div>
-
-        <p class="closed-lineup">
-          2027 LINEUP COMING SOON.
-        </p>
-      </section>
+      <form id="announcement-form" class="announcement-form">
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Your email for announcements"
+          autocomplete="email"
+          required
+        />
+        <button type="submit" class="announcement-btn">Notify me</button>
+        <p id="announcement-status" class="announcement-status" role="status"></p>
+      </form>
     </main>
+
+    <script>
+      document.getElementById('announcement-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('email');
+        const statusEl = document.getElementById('announcement-status');
+        const btn = document.querySelector('.announcement-btn');
+        const email = emailInput.value.trim();
+
+        if (!email) return;
+
+        statusEl.textContent = '';
+        statusEl.classList.remove('error', 'success');
+        btn.disabled = true;
+
+        try {
+          const res = await fetch('/api/announcements', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          const data = await res.json();
+
+          if (!res.ok) {
+            statusEl.textContent = data.error || 'Something went wrong.';
+            statusEl.classList.add('error');
+            btn.disabled = false;
+            return;
+          }
+
+          statusEl.textContent = data.message || "You're on the list.";
+          statusEl.classList.add('success');
+          emailInput.value = '';
+        } catch (err) {
+          statusEl.textContent = 'Network issue. Please try again.';
+          statusEl.classList.add('error');
+        }
+        btn.disabled = false;
+      });
+    </script>
   </body>
 </html>
-
